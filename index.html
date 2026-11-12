@@ -48,6 +48,7 @@ let FAC=[
 {name:"Arts and Humanities",depts:[]},{name:"Science",depts:[]},{name:"Social Sciences",depts:[]},
 {name:"Law",depts:[]},{name:"Biological Sciences",depts:[]},{name:"Engineering",depts:[]},
 {name:"Marine Sciences",depts:[]},{name:"Education",depts:[]}];
+const DIST=["Select district","Bagerhat","Bandarban","Barguna","Barishal","Bhola","Bogura","Brahmanbaria","Chandpur","Chapai Nawabganj","Chattogram","Chuadanga","Cox's Bazar","Cumilla","Dhaka","Dinajpur","Faridpur","Feni","Gaibandha","Gazipur","Gopalganj","Habiganj","Jamalpur","Jashore","Jhalakathi","Jhenaidah","Joypurhat","Khagrachhari","Khulna","Kishoreganj","Kurigram","Kushtia","Lakshmipur","Lalmonirhat","Madaripur","Magura","Manikganj","Meherpur","Moulvibazar","Munshiganj","Mymensingh","Naogaon","Narail","Narayanganj","Narsingdi","Natore","Netrokona","Nilphamari","Noakhali","Pabna","Panchagarh","Patuakhali","Pirojpur","Rajbari","Rajshahi","Rangamati","Rangpur","Satkhira","Shariatpur","Sherpur","Sirajganj","Sunamganj","Sylhet","Tangail","Thakurgaon"];
 const YEARS=["1st Year","2nd Year","3rd Year","4th Year","Masters"],SEMS=[1,2,3,4,5,6,7,8];
 const $=s=>document.querySelector(s),app=$("#app");
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -145,8 +146,8 @@ function formPage(editing){
  f("university","University","University of Chittagong",true)+
  sel("faculty","Faculty",FAC.map(x=>x.name),p.faculty,lockB,'onchange="fillDl()"')+
  `<label>Department</label><input class="in" id="dept" list="dl" value="${esc(p.dept||"")}" ${lockB?"disabled":""}><datalist id="dl">${dl.map(d=>`<option>${esc(d)}</option>`).join("")}</datalist>`+
- f("major","Major",p.major||"",lockB)+sel("year","Year",YEARS,p.year,lockB)+sel("sem","Semester",SEMS,p.sem,lockB)+
- f("session","Session (e.g. 2025-26)",p.session||"",lockB)+f("sid","Student ID",p.sid||"",lockB)+f("mobile","Mobile",p.mobile||"",lockB,'type="tel"')+f("home","Home town",p.home||"",lockB)+
+ f("major","Major (optional)",p.major||"",lockB)+sel("year","Year",YEARS,p.year,lockB)+sel("sem","Semester",SEMS,p.sem,lockB)+
+ f("session","Session (e.g. 2025-26)",p.session||"",lockB)+f("sid","Student ID",p.sid||"",lockB)+f("mobile","Mobile",p.mobile||"",lockB,'type="tel"')+sel("home","Home town (district)",DIST,p.home,lockB)+
  (lockB?`<div class="note">Other details unlock in ${left(p.bAt,30)} day(s).</div>`:"")+
  `<button class="btn" onclick="save()">Save profile</button>`;
 }
@@ -154,7 +155,7 @@ function fillDl(){const f=FAC.find(x=>x.name==$("#faculty").value);$("#dl").inne
 function pick(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const c=document.createElement("canvas"),m=Math.min(i.width,i.height);c.width=c.height=240;c.getContext("2d").drawImage(i,(i.width-m)/2,(i.height-m)/2,m,m,0,0,240,240);newPhoto=c.toDataURL("image/jpeg",.8);$("#pv").src=newPhoto};i.src=r.result};r.readAsDataURL(f)}
 
 async function save(){
- const g=id=>($("#"+id).value||"").trim(),d={name:g("name"),photo:newPhoto||(prof&&prof.photo)||me.photoURL||"",age:g("age"),faculty:g("faculty"),dept:g("dept"),major:g("major"),year:g("year"),sem:g("sem"),session:g("session"),sid:g("sid"),mobile:g("mobile"),home:g("home")};
+ const g=id=>($("#"+id).value||"").trim(),d={name:g("name"),photo:newPhoto||(prof&&prof.photo)||me.photoURL||"",age:g("age"),faculty:g("faculty"),dept:g("dept"),major:g("major"),year:g("year"),sem:g("sem"),session:g("session"),sid:g("sid"),mobile:g("mobile"),home:g("home")=="Select district"?"":g("home")};
  if(!d.name||!d.dept)return toast("Name and department are required.");
  const now=Date.now(),first=!prof,chA=first||G.some(k=>d[k]!==prof[k]),chB=first||B.some(k=>d[k]!==prof[k]);
  if(!first&&chA&&now-prof.aAt<7*864e5)return toast("Name and photo are still locked.");
