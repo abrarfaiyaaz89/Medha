@@ -6,35 +6,43 @@
 <link rel="icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#2A2438;--card:#352F44;--mid:#5C5470;--txt:#DBD8E3;--amber:#F2B84B;--green:#6FCF97;--red:#EB6F6F}
+:root{--bg:#231E32;--card:#2F2942;--card2:#3A3355;--mid:#5C5470;--txt:#EDEAF5;--sub:#A9A2BD;--acc:#A78BFA;--acc2:#7C6BE0;--amber:#F2B84B;--line:rgba(255,255,255,.09)}
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--txt);font:400 15px/1.5 Inter,sans-serif;padding-bottom:84px}
+body{background:radial-gradient(120% 55% at 50% -8%,#4B3F70 0%,transparent 62%),var(--bg);min-height:100vh;color:var(--txt);font:400 16px/1.5 Inter,sans-serif;padding-bottom:96px}
 h1,h2,h3,.ph{font-family:Poppins,sans-serif;font-weight:600}
-#app{max-width:520px;margin:auto;padding:18px 16px}
+h1{font-size:26px;line-height:1.2}h2{margin:22px 0 12px;font-size:18px}
+#app{max-width:480px;margin:auto;padding:22px 16px}#app>*{animation:up .28s ease both}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 button,input,select{font:inherit;color:inherit}
-.row{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:var(--card);border:0;border-radius:16px;padding:14px 16px;margin-bottom:10px;cursor:pointer}
-.row small{display:block;color:#a9a3b8}
-.btn{background:var(--txt);color:var(--bg);border:0;border-radius:14px;padding:13px 18px;font-weight:500;cursor:pointer;width:100%}
-.btn.alt{background:var(--mid);color:var(--txt)}
-.in{width:100%;background:var(--card);border:1px solid var(--mid);border-radius:12px;padding:11px 12px;margin:4px 0 12px}
-.in:disabled{opacity:.5}
-label{font-size:13px;color:#a9a3b8}
-.hero{background:var(--txt);color:var(--bg);border-radius:20px;padding:20px;margin:16px 0;display:block;width:100%;text-align:left;border:0;cursor:pointer}
-.hero small{color:#5C5470}
-.scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
-.chip{flex:0 0 auto;background:var(--card);border:0;border-radius:16px;padding:14px 16px;min-width:150px;text-align:left;cursor:pointer}
+.sub,small,label{color:var(--sub)}label{font-size:13px;display:block;margin-bottom:5px}
+.row{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px 16px;margin-bottom:10px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.row:active,.chip:active,.btn:active{transform:scale(.98)}
+.row small{display:block;font-size:13px}
+.btn{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:0;border-radius:16px;padding:15px 18px;font-weight:600;cursor:pointer;width:100%;box-shadow:0 8px 20px rgba(124,107,224,.35)}
+.btn.alt{background:var(--card2);box-shadow:none;border:1px solid var(--line)}.btn:disabled{opacity:.6}
+.in{width:100%;background:#272136;border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:14px;font-size:16px;outline:0}
+.in:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(167,139,250,.25)}.in:disabled{opacity:.5}
+input:-webkit-autofill{-webkit-box-shadow:0 0 0 40px #272136 inset;-webkit-text-fill-color:var(--txt)}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px 16px 4px;margin-bottom:14px}
+.sec h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hero{background:linear-gradient(135deg,#F1EEFB,#CFC6F0);color:#2A2438;border-radius:24px;padding:20px;margin:18px 0 12px;display:block;width:100%;text-align:left;border:0;cursor:pointer;box-shadow:0 12px 28px rgba(0,0,0,.3)}
+.hero small{color:#5C5470}.hero h2{margin:4px 0}
+.scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px}
+.chip{flex:0 0 auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;min-width:158px;text-align:left;cursor:pointer}
 .top{display:flex;justify-content:space-between;align-items:center}
-.av{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--mid);border:0}
-.srch{width:100%;background:var(--txt);color:var(--bg);border:0;border-radius:12px;padding:12px 14px;margin:14px 0 6px}
-.nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
-.nav button{background:none;border:0;padding:6px 14px;color:#a9a3b8;font-size:13px}
-.nav button.on{color:var(--txt);font-weight:500}
-.note{color:var(--amber);font-size:13px;margin:-8px 0 12px}
-.empty{background:var(--card);border-radius:16px;padding:18px;color:#a9a3b8}
-.back{background:none;border:0;color:var(--txt);margin-bottom:10px;cursor:pointer}
-.toast{position:fixed;left:16px;right:16px;bottom:96px;background:var(--txt);color:var(--bg);border-radius:12px;padding:12px 14px;max-width:488px;margin:auto}
-.strip{background:var(--card);border-radius:14px;padding:12px 14px;margin:6px 0 18px}
-h2{margin:18px 0 10px;font-size:17px}
+.av{width:46px;height:46px;border-radius:50%;object-fit:cover;background:var(--mid);border:2px solid var(--acc);padding:0}
+.srch{width:100%;background:#F1EEFB;color:#2A2438;border:0;border-radius:16px;padding:14px 16px;margin:16px 0 8px;font-size:16px;outline:0}
+.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(35,30,50,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);border-radius:22px 22px 0 0;display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+.nav button{background:none;border:0;padding:4px 16px;color:var(--sub);font-size:12px}.nav i{display:block;font-style:normal;font-size:20px}
+.nav button.on{color:var(--acc);font-weight:600}
+.note{color:var(--amber);font-size:13px;margin:-6px 0 14px}
+.empty{background:var(--card);border:1px dashed var(--mid);border-radius:18px;padding:20px;color:var(--sub)}
+.back{background:none;border:0;color:var(--acc);margin-bottom:10px;cursor:pointer;font-weight:500}
+.toast{position:fixed;left:16px;right:16px;bottom:104px;background:#F1EEFB;color:#2A2438;border-radius:14px;padding:13px 16px;max-width:448px;margin:auto;box-shadow:0 10px 30px rgba(0,0,0,.4);z-index:9}
+.strip{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin:6px 0 10px}
+.spin{width:36px;height:36px;border:4px solid var(--card2);border-top-color:var(--acc);border-radius:50%;margin:42vh auto 0;animation:sp .8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.pv{text-align:center;margin:6px 0 18px}.pv .av{width:92px;height:92px}
 </style></head><body><div id="app"></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -57,7 +65,7 @@ let auth,db,me,prof,tab="home",nav=[],newPhoto=null;
 const G=["name","photo"],B=["age","faculty","dept","major","year","sem","session","sid","mobile","home"];
 
 function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3500)}
-function show(h,withNav){app.innerHTML=h+(withNav?`<div class="nav">${[["home","Home"],["exams","Exams"],["rank","Rank"],["me","Profile"]].map(([k,l])=>`<button class="${tab==k&&!nav.length?"on":""}" onclick="setTab('${k}')">${l}</button>`).join("")}</div>`:"");}
+function show(h,withNav){app.innerHTML=h+(withNav?`<div class="nav">${[["home","🏠","Home"],["exams","📝","Exams"],["rank","🏆","Rank"],["me","👤","Profile"]].map(([k,i,l])=>`<button class="${tab==k&&!nav.length?"on":""}" onclick="setTab('${k}')"><i>${i}</i>${l}</button>`).join("")}</div>`:"");}
 function setTab(k){tab=k;nav=[];render()}
 function go(v){nav.push(v);render()}
 function back(){nav.pop();render()}
@@ -71,12 +79,12 @@ if(CFG.apiKey.startsWith("PASTE")){
 }else{
  firebase.initializeApp(CFG);auth=firebase.auth();db=firebase.firestore();
  auth.onAuthStateChanged(async u=>{me=u;if(!u){prof=null;return login()}
-  show(`<p style="margin-top:40vh;text-align:center">Loading…</p>`);
+  show(`<div class="spin"></div>`);
   try{
    const [p,c]=await Promise.all([db.collection("users").doc(u.uid).get(),db.collection("catalog").doc("cu").get()]);
    prof=p.exists?p.data():null;
    if(c.exists&&Array.isArray(c.data().faculties))FAC=c.data().faculties;
-  }catch(e){show(`<h1>Could not load</h1><p>${esc(e.message)}</p>`);return}
+  }catch(e){show(`<h1>Could not load</h1><p class="sub" style="margin:8px 0 16px">Check your internet and try again.</p><button class="btn" onclick="location.reload()">Try again</button>`);return}
   render();
  });
 }
@@ -86,7 +94,7 @@ function login(){
  <button class="btn" onclick="signIn()">Continue with Google</button>
  <p style="margin-top:14px;font-size:13px;color:#a9a3b8">By continuing you agree to the rules in the Profile tab.</p></div>`);
 }
-async function signIn(){try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){if(e.code!="auth/popup-closed-by-user")toast("Sign in failed: "+e.code)}}
+async function signIn(){try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){if(e.code=="auth/popup-blocked")auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());else if(e.code!="auth/popup-closed-by-user")toast("Sign in failed. Check your internet and try again.")}}
 
 function render(){
  if(!prof)return show(formPage(),false);
@@ -136,31 +144,31 @@ function me_(){
 function formPage(editing){
  const p=prof||{},lockA=editing&&Date.now()-p.aAt<7*864e5,lockB=editing&&Date.now()-p.bAt<30*864e5;
  newPhoto=null;
- const f=(id,l,v,lock,ex="")=>`<label>${l}</label><input class="in" id="${id}" value="${esc(v)}" ${lock?"disabled":""} ${ex}>`;
- const sel=(id,l,opts,v,lock,fn="")=>`<label>${l}</label><select class="in" id="${id}" ${lock?"disabled":""} ${fn}>${opts.map(o=>`<option ${String(o)==String(v)?"selected":""}>${esc(o)}</option>`).join("")}</select>`;
+ const f=(id,l,v,lock,ex="")=>`<div><label>${l}</label><input class="in" id="${id}" value="${esc(v)}" ${lock?"disabled":""} ${ex}></div>`;
+ const sel=(id,l,opts,v,lock,fn="")=>`<div><label>${l}</label><select class="in" id="${id}" ${lock?"disabled":""} ${fn}>${opts.map(o=>`<option ${String(o)==String(v)?"selected":""}>${esc(o)}</option>`).join("")}</select></div>`;
  const dl=(FAC.find(x=>x.name==(p.faculty||FAC[0].name))||{depts:[]}).depts;
- return (editing?"":`<h1 style="margin-bottom:4px">Set up your profile</h1><p style="margin-bottom:16px;color:#a9a3b8">This takes one minute.</p>`)+
- `<div style="text-align:center;margin-bottom:12px"><img id="pv" class="av" style="width:88px;height:88px" src="${esc(p.photo||me.photoURL||"logo.png")}"><br>${lockA?"":`<label style="cursor:pointer;text-decoration:underline">Change photo<input type="file" accept="image/*" hidden onchange="pick(event)"></label>`}</div>`+
- f("name","Name",p.name||me.displayName||"",lockA)+(lockA?`<div class="note">Name and photo unlock in ${left(p.aAt,7)} day(s).</div>`:"")+
- f("age","Age",p.age||"",lockB,'type="number" min="10" max="80"')+
- f("university","University","University of Chittagong",true)+
- sel("faculty","Faculty",FAC.map(x=>x.name),p.faculty,lockB,'onchange="fillDl()"')+
- `<label>Department</label><input class="in" id="dept" list="dl" value="${esc(p.dept||"")}" ${lockB?"disabled":""}><datalist id="dl">${dl.map(d=>`<option>${esc(d)}</option>`).join("")}</datalist>`+
- f("major","Major (optional)",p.major||"",lockB)+sel("year","Year",YEARS,p.year,lockB)+sel("sem","Semester",SEMS,p.sem,lockB)+
- f("session","Session (e.g. 2025-26)",p.session||"",lockB)+f("sid","Student ID",p.sid||"",lockB)+f("mobile","Mobile",p.mobile||"",lockB,'type="tel"')+sel("home","Home town (district)",DIST,p.home,lockB)+
+ return (editing?"":`<h1>Welcome to Medha</h1><p class="sub" style="margin:4px 0 18px">Set up your profile in one minute.</p>`)+
+ `<div class="pv"><img id="pv" class="av" src="${esc(p.photo||me.photoURL||"logo.png")}"><br>${lockA?"":`<label style="cursor:pointer;color:var(--acc);margin-top:8px">Change photo<input type="file" accept="image/*" hidden onchange="pick(event)"></label>`}</div>`+
+ `<div class="sec"><h3>Basic</h3>${f("name","Name",p.name||me.displayName||"",lockA)}${lockA?`<div class="note">Name and photo unlock in ${left(p.aAt,7)} day(s).</div>`:""}<div class="g2">${f("age","Age",p.age||"",lockB,'type="number" min="10" max="80" inputmode="numeric"')}${f("session","Session",p.session||"",lockB,'placeholder="2025-26"')}</div></div>`+
+ `<div class="sec"><h3>University</h3>${f("university","University","University of Chittagong",true)}${sel("faculty","Faculty",FAC.map(x=>x.name),p.faculty,lockB,'onchange="fillDl()"')}<div><label>Department</label><input class="in" id="dept" list="dl" value="${esc(p.dept||"")}" ${lockB?"disabled":""}><datalist id="dl">${dl.map(d=>`<option>${esc(d)}</option>`).join("")}</datalist></div>${f("major","Major (optional)",p.major||"",lockB)}<div class="g2">${sel("year","Year",YEARS,p.year,lockB)}${sel("sem","Semester",SEMS,p.sem,lockB)}</div>${f("sid","Student ID",p.sid||"",lockB,'inputmode="numeric"')}</div>`+
+ `<div class="sec"><h3>Contact</h3>${f("mobile","Mobile",p.mobile||"",lockB,'type="tel" inputmode="tel"')}${sel("home","Home town (district)",DIST,p.home,lockB)}</div>`+
  (lockB?`<div class="note">Other details unlock in ${left(p.bAt,30)} day(s).</div>`:"")+
- `<button class="btn" onclick="save()">Save profile</button>`;
+ `<button id="sv" class="btn" onclick="save()">Save profile</button><div style="height:24px"></div>`;
 }
 function fillDl(){const f=FAC.find(x=>x.name==$("#faculty").value);$("#dl").innerHTML=(f?f.depts:[]).map(d=>`<option>${esc(d)}</option>`).join("")}
 function pick(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const c=document.createElement("canvas"),m=Math.min(i.width,i.height);c.width=c.height=240;c.getContext("2d").drawImage(i,(i.width-m)/2,(i.height-m)/2,m,m,0,0,240,240);newPhoto=c.toDataURL("image/jpeg",.8);$("#pv").src=newPhoto};i.src=r.result};r.readAsDataURL(f)}
 
 async function save(){
  const g=id=>($("#"+id).value||"").trim(),d={name:g("name"),photo:newPhoto||(prof&&prof.photo)||me.photoURL||"",age:g("age"),faculty:g("faculty"),dept:g("dept"),major:g("major"),year:g("year"),sem:g("sem"),session:g("session"),sid:g("sid"),mobile:g("mobile"),home:g("home")=="Select district"?"":g("home")};
- if(!d.name||!d.dept)return toast("Name and department are required.");
+ if(!d.name)return toast("Please enter your name.");
+ if(!d.dept)return toast("Please choose your department.");
+ if(d.age&&(d.age<10||d.age>80))return toast("Please enter a valid age.");
+ if(d.mobile&&!/^(\+?88)?01\d{9}$/.test(d.mobile))return toast("Enter a valid mobile number, like 017XXXXXXXX.");
+ const b=$("#sv");b.disabled=true;b.textContent="Saving…";
  const now=Date.now(),first=!prof,chA=first||G.some(k=>d[k]!==prof[k]),chB=first||B.some(k=>d[k]!==prof[k]);
  if(!first&&chA&&now-prof.aAt<7*864e5)return toast("Name and photo are still locked.");
  if(!first&&chB&&now-prof.bAt<30*864e5)return toast("Other details are still locked.");
  const out={...(prof||{}),...d,university:"University of Chittagong",uid:me.uid,aAt:chA?now:prof.aAt,bAt:chB?now:prof.bAt};
- try{await db.collection("users").doc(me.uid).set(out);prof=out;nav=[];tab="home";toast("Saved");render()}catch(e){toast("Could not save: "+e.code)}
+ try{await db.collection("users").doc(me.uid).set(out);prof=out;nav=[];tab="home";toast("Saved");render()}catch(e){b.disabled=false;b.textContent="Save profile";toast("Could not save. Check your internet and try again.")}
 }
 </script></body></html>
