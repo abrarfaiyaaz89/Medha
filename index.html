@@ -6,9 +6,11 @@
 <link rel="icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#231E32;--card:#2F2942;--card2:#3A3355;--mid:#5C5470;--txt:#EDEAF5;--sub:#A9A2BD;--acc:#A78BFA;--acc2:#7C6BE0;--amber:#F2B84B;--line:rgba(255,255,255,.09)}
+:root{--bg:#231E32;--card:#2F2942;--card2:#3A3355;--mid:#5C5470;--txt:#EDEAF5;--sub:#A9A2BD;--acc:#A78BFA;--acc2:#7C6BE0;--amber:#F2B84B;--line:rgba(255,255,255,.09);--b2:#E879F9;--green:#6FCF97;--red:#EB6F6F}
+html[data-t=ocean]{--bg:#0F1D2E;--card:#182A40;--card2:#223954;--acc:#38BDF8;--acc2:#2563EB;--b2:#6366F1}
+html[data-t=sunset]{--bg:#2B1B2E;--card:#3A2540;--card2:#4A2F52;--acc:#FB7185;--acc2:#F97316;--b2:#F59E0B}
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
-body{background:radial-gradient(120% 55% at 50% -8%,#4B3F70 0%,transparent 62%),var(--bg);min-height:100vh;color:var(--txt);font:400 16px/1.5 Inter,sans-serif;padding-bottom:96px}
+body{background:radial-gradient(120% 55% at 50% -8%,color-mix(in srgb,var(--acc) 30%,var(--bg)) 0%,transparent 62%),var(--bg);min-height:100vh;color:var(--txt);font:400 16px/1.5 Inter,sans-serif;padding-bottom:96px}
 h1,h2,h3,.ph{font-family:Poppins,sans-serif;font-weight:600}
 h1{font-size:26px;line-height:1.2}h2{margin:22px 0 12px;font-size:18px}
 #app{max-width:480px;margin:auto;padding:22px 16px}#app>*{animation:up .28s ease both}
@@ -43,7 +45,19 @@ input:-webkit-autofill{-webkit-box-shadow:0 0 0 40px #272136 inset;-webkit-text-
 .strip{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin:6px 0 10px}
 .spin{width:36px;height:36px;border:4px solid var(--card2);border-top-color:var(--acc);border-radius:50%;margin:42vh auto 0;animation:sp .8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
 .pv{text-align:center;margin:6px 0 18px}.pv .av{width:92px;height:92px}
-</style></head><body><div id="app"></div>
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden}.bg i{position:absolute;border-radius:50%;filter:blur(64px);opacity:.45;animation:fl 14s ease-in-out infinite alternate}
+.bg i:nth-child(1){width:300px;height:300px;background:var(--acc);top:-90px;left:-70px}.bg i:nth-child(2){width:260px;height:260px;background:var(--b2);bottom:12%;right:-90px;animation-delay:-5s}.bg i:nth-child(3){width:200px;height:200px;background:var(--amber);bottom:-70px;left:18%;opacity:.22;animation-delay:-9s}
+@keyframes fl{to{transform:translate(40px,60px) scale(1.2)}}
+.hero{position:relative;overflow:hidden}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.65) 50%,transparent 60%);transform:translateX(-100%);animation:sh 4.5s infinite}@keyframes sh{to{transform:translateX(100%)}}
+.logo{animation:flo 3s ease-in-out infinite alternate}@keyframes flo{to{transform:translateY(-10px)}}
+.btn:not(:disabled){animation:pul 2.8s infinite}@keyframes pul{50%{box-shadow:0 8px 32px color-mix(in srgb,var(--acc) 75%,transparent)}}
+.row:nth-child(2){animation-delay:.05s}.row:nth-child(3){animation-delay:.1s}.row:nth-child(4){animation-delay:.15s}.row:nth-child(5){animation-delay:.2s}.row:nth-child(n+6){animation-delay:.25s}
+.ok{border-color:var(--green)!important;background:rgba(111,207,151,.2)!important}.bad{border-color:var(--red)!important;background:rgba(235,111,111,.2)!important}
+.shake{animation:shk .4s}@keyframes shk{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.row:disabled{cursor:default;color:var(--txt)}.ring circle{transition:stroke-dashoffset 1.5s cubic-bezier(.2,.8,.2,1)}
+.cf{position:fixed;top:-20px;width:8px;height:14px;border-radius:2px;z-index:99;animation:fall 2.8s linear forwards}@keyframes fall{to{transform:translateY(108vh) rotate(720deg)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div class="bg"><i></i><i></i><i></i></div><div id="app"></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -96,7 +110,7 @@ if(CFG.apiKey.startsWith("PASTE")){
 }
 
 function login(){
- show(`<div style="text-align:center;padding-top:12vh"><img src="logo.png" alt="Medha" style="width:240px;border-radius:40px"><p class="ph" style="margin:22px 0 28px">Practice. Get checked. Rank up.</p>
+ show(`<div style="text-align:center;padding-top:12vh"><img class="logo" src="logo.png" alt="Medha" style="width:240px;border-radius:40px"><p class="ph" style="margin:22px 0 28px">Practice. Get checked. Rank up.</p>
  <button class="btn" onclick="signIn()">Continue with Google</button>
  <p style="margin-top:14px;font-size:13px;color:#a9a3b8">By continuing you agree to the rules in the Profile tab.</p></div>`);
 }
@@ -127,7 +141,7 @@ function page(v){
  if(v.t=="fac"){const f=FAC.find(x=>x.name==v.f)||{depts:[]};return head(v.f)+(f.depts.length?f.depts.map(d=>row(d,"",{t:"dept",f:v.f,d})).join(""):empty("Departments for this faculty are not added yet."))}
  if(v.t=="dept")return head(v.d)+SEMS.map(s=>row("Semester "+s,v.d==prof.dept&&s==prof.sem?"Your semester":"",{t:"sub",f:v.f,d:v.d,s})).join("");
  if(v.t=="sub")return head(v.d+" · Semester "+v.s)+`<div id="subs"></div><h2>Add a subject</h2><input id="ns" class="in" maxlength="70" placeholder="Subject name, e.g. Statistics"><button class="btn" onclick='addSub(${A(v)})'>Add subject</button>`;
- if(v.t=="subj")return head(v.n)+`<div class="scroll" style="margin-bottom:14px">${["Upload","Exams","Top answers"].map(x=>`<span class="chip" style="min-width:0">${x}</span>`).join("")}</div>`+empty("Coming in Version 2: upload a file, pick Quiz or Broad, and get AI marks.");
+ if(v.t=="subj")return head(v.n)+'<div id="ex">'+exSetup()+'</div>';
  if(v.t=="edit")return head("Edit profile")+formPage(true);
  if(v.t=="rules")return head("Rules")+`<div class="empty">• Upload only material you are allowed to share.<br>• No full paid books and no leaked exams.<br>• No insults, fake accounts or cheating tricks.<br>• AI marks are estimates, not official results.<br>• Reported posts can be removed.</div>`;
 }
@@ -143,6 +157,7 @@ function me_(){
  ${[["University",prof.university],["Year",prof.year],["Semester",prof.sem],["Session",prof.session],["Student ID",prof.sid],["Age",prof.age],["Major",prof.major],["Mobile",prof.mobile],["Home town",prof.home]].map(([k,v])=>`<div class="row" style="cursor:default"><small>${k}</small><span>${esc(v||"-")}</span></div>`).join("")}
  <small style="display:block;margin:0 0 12px">Mobile and ID are private. Only you can see them.</small>
  <button class="btn" onclick="go({t:'edit'})" style="margin-bottom:10px">Edit profile</button>
+ <button class="btn alt" onclick="theme()" style="margin-bottom:10px">🎨 Change theme</button>
  <button class="btn alt" onclick="go({t:'rules'})" style="margin-bottom:10px">Rules</button>
  <button class="btn alt" onclick="auth.signOut()">Sign out</button>`;
 }
@@ -177,4 +192,37 @@ async function save(){
  const out={...(prof||{}),...d,university:"University of Chittagong",uid:me.uid,aAt:chA?now:prof.aAt,bAt:chB?now:prof.bAt};
  try{await db.collection("users").doc(me.uid).set(out);prof=out;nav=[];tab="home";toast("Saved");render()}catch(e){b.disabled=false;b.textContent="Save profile";toast("Could not save. Check your internet and try again.")}
 }
-</script></body></html>
+let EX=null,exFile=null;const today=()=>new Date().toISOString().slice(0,10);
+function theme(){const T=["","ocean","sunset"],n=T[(T.indexOf(document.documentElement.dataset.t||"")+1)%3];document.documentElement.dataset.t=n;try{localStorage.setItem("t",n)}catch(e){}}
+try{document.documentElement.dataset.t=localStorage.getItem("t")||""}catch(e){}
+function exSetup(){return `<div class="sec"><h3>Make an exam</h3><label>Study file (PDF, image or text, max 4 MB)</label><input class="in" type="file" accept=".pdf,image/*,.txt" onchange="exFile=this.files[0]"><div class="g2"><div><label>Type</label><select class="in" id="xt"><option value="q">Quiz (1 mark)</option><option value="b">Broad (10 mark)</option></select></div><div><label>Questions</label><select class="in" id="xn"><option>3</option><option selected>5</option><option>10</option></select></div></div></div><button class="btn" onclick="startEx()">Start exam ✨</button><small style="display:block;margin-top:10px">AI marks are estimates. Limit: 5 exams per day.</small>`}
+const b64=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result.split(",")[1]);r.onerror=no;r.readAsDataURL(f)});
+async function startEx(){
+ if(!exFile)return toast("Choose a file first.");if(exFile.size>4e6)return toast("File is too big. Max 4 MB.");
+ if(prof.exDay==today()&&prof.exN>=5)return toast("Daily limit reached. Come back tomorrow.");
+ const t=$("#xt").value,n=$("#xn").value,box=$("#ex");box.innerHTML='<div class="spin" style="margin-top:18vh"></div><p class="sub" style="text-align:center;margin-top:14px">Medha is reading your file…</p>';
+ try{const p=t=="q"?`Write ${n} multiple-choice questions (1 mark each) from this study material for a university exam. Return JSON {"qs":[{"q":"","o":["","","",""],"a":0,"w":"short reason"}]} where a is the index of the right option.`:`Write ${n} broad questions (10 marks each, OBE style) from this study material. Return JSON {"qs":[{"q":""}]}.`;
+  const r=await askAI([{inlineData:{mimeType:exFile.type||"text/plain",data:await b64(exFile)}},p]);if(!r.qs||!r.qs.length)throw 0;
+  EX={t,qs:r.qs,i:0,s:0};const d=today();prof.exN=prof.exDay==d?(prof.exN||0)+1:1;prof.exDay=d;db.collection("users").doc(me.uid).set({exDay:d,exN:prof.exN},{merge:true}).catch(()=>{});exView();
+ }catch(e){box.innerHTML=exSetup();toast("Could not make the exam. Check the file, your internet, and that Firebase AI is turned on.")}}
+function exView(){const q=EX.qs[EX.i];
+ $("#ex").innerHTML=`<small>Question ${EX.i+1} of ${EX.qs.length}</small><div style="height:6px;background:var(--card2);border-radius:9px;margin:6px 0 16px"><div style="height:6px;width:${EX.i/EX.qs.length*100}%;background:var(--acc);border-radius:9px"></div></div><h2 style="margin-top:0">${esc(q.q)}</h2>`+(EX.t=="q"?q.o.map((o,k)=>`<button class="row" onclick="pickO(${k})">${esc(o)}</button>`).join(""):`<textarea id="ba" class="in" rows="9" placeholder="Write your answer…"></textarea><button class="btn" onclick="gradeB()">Submit answer</button>`)}
+function pickO(k){const q=EX.qs[EX.i],bs=[...document.querySelectorAll("#ex .row")];if(bs[0].disabled)return;bs.forEach((b,j)=>{b.disabled=true;if(j==q.a)b.classList.add("ok")});if(k==q.a)EX.s++;else bs[k].classList.add("bad","shake");
+ $("#ex").insertAdjacentHTML("beforeend",`<div class="empty" style="margin:8px 0 14px">${esc(q.w||"")}</div><button class="btn" onclick="nextQ()">Next →</button>`)}
+function nextQ(){EX.i++;EX.i<EX.qs.length?exView():exDone()}
+async function gradeB(){const a=$("#ba").value.trim();if(a.length<20)return toast("Write a longer answer first.");const b=$("#ex .btn");b.disabled=true;b.textContent="Checking like a professor…";
+ try{const r=await askAI([`You are a fair university professor. Question: ${EX.qs[EX.i].q}\nStudent answer: ${a}\nGrade out of 10. Point out only the main errors, not tiny ones. Return JSON {"mark":0,"good":"","fix":["",""],"study":""}`]);
+  const m=Math.max(0,Math.min(10,Number(r.mark)||0));EX.s+=m;
+  $("#ex").innerHTML=`<h2 style="margin-top:0">${m}/10 <small>AI estimated</small></h2><div class="sec"><h3>Good</h3><p style="margin-bottom:14px">${esc(r.good)}</p></div><div class="sec"><h3>Fix these</h3><p style="margin-bottom:14px">${(r.fix||[]).map(x=>"• "+esc(x)).join("<br>")}</p></div><div class="sec"><h3>Study next</h3><p style="margin-bottom:14px">${esc(r.study)}</p></div><button class="btn" onclick="nextQ()">Next →</button>`;
+ }catch(e){b.disabled=false;b.textContent="Submit answer";toast("Could not check. Try again.")}}
+function exDone(){const tot=EX.t=="q"?EX.qs.length:EX.qs.length*10,pc=Math.round(EX.s/tot*100),C=2*Math.PI*52;
+ $("#ex").innerHTML=`<div style="text-align:center"><svg class="ring" width="150" height="150" viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--card2)" stroke-width="10"/><circle id="rg" cx="60" cy="60" r="52" fill="none" stroke="var(--acc)" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" transform="rotate(-90 60 60)"/><text x="60" y="68" text-anchor="middle" fill="var(--txt)" font-size="26" font-family="Poppins">${pc}%</text></svg><h2>${EX.s} / ${tot}</h2><p class="sub">AI estimated. Keep practising!</p></div><button class="btn" style="margin-top:16px" onclick="$('#ex').innerHTML=exSetup()">New exam</button>`;
+ setTimeout(()=>{const g=$("#rg");if(g)g.style.strokeDashoffset=C*(1-pc/100)},80);if(pc>=70)confetti()}
+function confetti(){for(let i=0;i<46;i++){const d=document.createElement("i");d.className="cf";d.style.cssText=`left:${Math.random()*100}vw;background:${["#F2B84B","#A78BFA","#6FCF97","#EB6F6F","#38BDF8"][i%5]};animation-delay:${Math.random()*.6}s`;document.body.appendChild(d);setTimeout(()=>d.remove(),3600)}}
+</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {getAI,getGenerativeModel,GoogleAIBackend} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-ai.js";
+let M;window.askAI=async parts=>{M=M||getGenerativeModel(getAI(initializeApp(CFG,"ai"),{backend:new GoogleAIBackend()}),{model:"gemini-2.5-flash",generationConfig:{responseMimeType:"application/json"}});return JSON.parse((await M.generateContent(parts)).response.text())};
+</script>
+</body></html>
