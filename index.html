@@ -52,10 +52,16 @@ input:-webkit-autofill{-webkit-box-shadow:0 0 0 40px #272136 inset;-webkit-text-
 const CFG={apiKey:"AIzaSyBEPx0_PdmfFk3ODhi0kw73M7sWfNV2ob4",authDomain:"medha-7a7aa.firebaseapp.com",projectId:"medha-7a7aa",appId:"1:237258474031:web:b1b6ec7bf7edb2788b3cda"};
 /* ================================================================================ */
 let FAC=[
-{name:"Business Administration (BBA)",depts:["Accounting","Management","Marketing","Finance"]},
-{name:"Arts and Humanities",depts:[]},{name:"Science",depts:[]},{name:"Social Sciences",depts:[]},
-{name:"Law",depts:[]},{name:"Biological Sciences",depts:[]},{name:"Engineering",depts:[]},
-{name:"Marine Sciences",depts:[]},{name:"Education",depts:[]}];
+{name:"Arts and Humanities",depts:["Bangla", "English", "History", "Philosophy", "Islamic History and Culture", "Arabic", "Islamic Studies", "Dramatics", "Institute of Modern Languages", "Institute of Fine Arts", "Persian Language & Literature", "Pali", "Sanskrit", "Music", "Bangladesh Studies"]},
+{name:"Science",depts:["Physics", "Chemistry", "Mathematics", "Statistics", "Applied Chemistry and Chemical Engineering", "Forestry and Environmental Sciences", "Jamal Nazrul Islam Center for Advanced Research (JNICAR)"]},
+{name:"Business Administration (BBA)",depts:["Accounting", "Management", "Finance", "Marketing", "Human Resource Management", "Banking and Insurance", "Chittagong University Center for Business Administration", "Bureau of Business Research"]},
+{name:"Social Sciences",depts:["Economics", "Political Science", "Sociology", "Public Administration", "Anthropology", "International Relations", "Communication and Journalism", "Criminology and Police Science", "Development Studies", "Social Science Research Institute"]},
+{name:"Law",depts:["Law"]},
+{name:"Biological Sciences",depts:["Zoology", "Botany", "Geography and Environmental Studies", "Biochemistry and Molecular Biology", "Microbiology", "Soil Science", "Genetic Engineering and Biotechnology", "Psychology", "Pharmacy"]},
+{name:"Engineering",depts:["Computer Science & Engineering", "Electrical and Electronic Engineering"]},
+{name:"Education",depts:["Physical Education and Sports Science", "Institute of Education And Research"]},
+{name:"Marine Sciences and Fisheries",depts:["Marine Sciences", "Oceanography", "Fisheries"]},
+{name:"Medicine",depts:["Paediatrics", "Community Ophthalmology"]}];
 const DIST=["Select district","Bagerhat","Bandarban","Barguna","Barishal","Bhola","Bogura","Brahmanbaria","Chandpur","Chapai Nawabganj","Chattogram","Chuadanga","Cox's Bazar","Cumilla","Dhaka","Dinajpur","Faridpur","Feni","Gaibandha","Gazipur","Gopalganj","Habiganj","Jamalpur","Jashore","Jhalakathi","Jhenaidah","Joypurhat","Khagrachhari","Khulna","Kishoreganj","Kurigram","Kushtia","Lakshmipur","Lalmonirhat","Madaripur","Magura","Manikganj","Meherpur","Moulvibazar","Munshiganj","Mymensingh","Naogaon","Narail","Narayanganj","Narsingdi","Natore","Netrokona","Nilphamari","Noakhali","Pabna","Panchagarh","Patuakhali","Pirojpur","Rajbari","Rajshahi","Rangamati","Rangpur","Satkhira","Shariatpur","Sherpur","Sirajganj","Sunamganj","Sylhet","Tangail","Thakurgaon"];
 const YEARS=["1st Year","2nd Year","3rd Year","4th Year","Masters"],SEMS=[1,2,3,4,5,6,7,8];
 const $=s=>document.querySelector(s),app=$("#app");
