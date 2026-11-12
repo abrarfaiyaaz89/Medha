@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2A2438">
+<title>Medha</title>
+<link rel="icon" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#2A2438;--card:#352F44;--mid:#5C5470;--txt:#DBD8E3;--amber:#F2B84B;--green:#6FCF97;--red:#EB6F6F}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--txt);font:400 15px/1.5 Inter,sans-serif;padding-bottom:84px}
+h1,h2,h3,.ph{font-family:Poppins,sans-serif;font-weight:600}
+#app{max-width:520px;margin:auto;padding:18px 16px}
+button,input,select{font:inherit;color:inherit}
+.row{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:var(--card);border:0;border-radius:16px;padding:14px 16px;margin-bottom:10px;cursor:pointer}
+.row small{display:block;color:#a9a3b8}
+.btn{background:var(--txt);color:var(--bg);border:0;border-radius:14px;padding:13px 18px;font-weight:500;cursor:pointer;width:100%}
+.btn.alt{background:var(--mid);color:var(--txt)}
+.in{width:100%;background:var(--card);border:1px solid var(--mid);border-radius:12px;padding:11px 12px;margin:4px 0 12px}
+.in:disabled{opacity:.5}
+label{font-size:13px;color:#a9a3b8}
+.hero{background:var(--txt);color:var(--bg);border-radius:20px;padding:20px;margin:16px 0;display:block;width:100%;text-align:left;border:0;cursor:pointer}
+.hero small{color:#5C5470}
+.scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+.chip{flex:0 0 auto;background:var(--card);border:0;border-radius:16px;padding:14px 16px;min-width:150px;text-align:left;cursor:pointer}
+.top{display:flex;justify-content:space-between;align-items:center}
+.av{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--mid);border:0}
+.srch{width:100%;background:var(--txt);color:var(--bg);border:0;border-radius:12px;padding:12px 14px;margin:14px 0 6px}
+.nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+.nav button{background:none;border:0;padding:6px 14px;color:#a9a3b8;font-size:13px}
+.nav button.on{color:var(--txt);font-weight:500}
+.note{color:var(--amber);font-size:13px;margin:-8px 0 12px}
+.empty{background:var(--card);border-radius:16px;padding:18px;color:#a9a3b8}
+.back{background:none;border:0;color:var(--txt);margin-bottom:10px;cursor:pointer}
+.toast{position:fixed;left:16px;right:16px;bottom:96px;background:var(--txt);color:var(--bg);border-radius:12px;padding:12px 14px;max-width:488px;margin:auto}
+.strip{background:var(--card);border-radius:14px;padding:12px 14px;margin:6px 0 18px}
+h2{margin:18px 0 10px;font-size:17px}
+</style></head><body><div id="app"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* ===== STEP: paste your Firebase values here (replace the words in quotes) ===== */
+const CFG={apiKey:"AIzaSyBEPx0_PdmfFk3ODhi0kw73M7sWfNV2ob4",authDomain:"medha-7a7aa.firebaseapp.com",projectId:"medha-7a7aa",appId:"1:237258474031:web:b1b6ec7bf7edb2788b3cda"};
+/* ================================================================================ */
+let FAC=[
+{name:"Business Administration (BBA)",depts:["Accounting","Management","Marketing","Finance"]},
+{name:"Arts and Humanities",depts:[]},{name:"Science",depts:[]},{name:"Social Sciences",depts:[]},
+{name:"Law",depts:[]},{name:"Biological Sciences",depts:[]},{name:"Engineering",depts:[]},
+{name:"Marine Sciences",depts:[]},{name:"Education",depts:[]}];
+const YEARS=["1st Year","2nd Year","3rd Year","4th Year","Masters"],SEMS=[1,2,3,4,5,6,7,8];
+const $=s=>document.querySelector(s),app=$("#app");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const A=x=>esc(JSON.stringify(x));
+let auth,db,me,prof,tab="home",nav=[],newPhoto=null;
+const G=["name","photo"],B=["age","faculty","dept","major","year","sem","session","sid","mobile","home"];
+
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3500)}
+function show(h,withNav){app.innerHTML=h+(withNav?`<div class="nav">${[["home","Home"],["exams","Exams"],["rank","Rank"],["me","Profile"]].map(([k,l])=>`<button class="${tab==k&&!nav.length?"on":""}" onclick="setTab('${k}')">${l}</button>`).join("")}</div>`:"");}
+function setTab(k){tab=k;nav=[];render()}
+function go(v){nav.push(v);render()}
+function back(){nav.pop();render()}
+const head=t=>`<button class="back" onclick="back()">← Back</button><h1 style="margin-bottom:14px">${esc(t)}</h1>`;
+const row=(t,s,v)=>`<button class="row" onclick="go(${A(v)})"><span>${esc(t)}${s?`<small>${esc(s)}</small>`:""}</span><span>›</span></button>`;
+const empty=t=>`<div class="empty">${esc(t)}</div>`;
+const left=(at,d)=>Math.max(0,Math.ceil((at+d*864e5-Date.now())/864e5));
+
+if(CFG.apiKey.startsWith("PASTE")){
+ show(`<h1>Almost ready</h1><p style="margin-top:10px">Open <b>index.html</b> and paste your Firebase values at the top (the lines under STEP).</p>`)
+}else{
+ firebase.initializeApp(CFG);auth=firebase.auth();db=firebase.firestore();
+ auth.onAuthStateChanged(async u=>{me=u;if(!u){prof=null;return login()}
+  show(`<p style="margin-top:40vh;text-align:center">Loading…</p>`);
+  try{
+   const [p,c]=await Promise.all([db.collection("users").doc(u.uid).get(),db.collection("catalog").doc("cu").get()]);
+   prof=p.exists?p.data():null;
+   if(c.exists&&Array.isArray(c.data().faculties))FAC=c.data().faculties;
+  }catch(e){show(`<h1>Could not load</h1><p>${esc(e.message)}</p>`);return}
+  render();
+ });
+}
+
+function login(){
+ show(`<div style="text-align:center;padding-top:12vh"><img src="logo.png" alt="Medha" style="width:240px;border-radius:40px"><p class="ph" style="margin:22px 0 28px">Practice. Get checked. Rank up.</p>
+ <button class="btn" onclick="signIn()">Continue with Google</button>
+ <p style="margin-top:14px;font-size:13px;color:#a9a3b8">By continuing you agree to the rules in the Profile tab.</p></div>`);
+}
+async function signIn(){try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){if(e.code!="auth/popup-closed-by-user")toast("Sign in failed: "+e.code)}}
+
+function render(){
+ if(!prof)return show(formPage(),false);
+ const v=nav[nav.length-1];
+ if(v)return show(page(v),true),v.t=="sub"&&loadSubs(v);
+ show(tab=="home"?home():tab=="me"?me_():soon(tab=="exams"?"Exams":"Rank"),true);
+}
+const soon=t=>`<h1>${t}</h1><div class="empty" style="margin-top:14px">${t=="Rank"?"The daily rank board opens in Version 3.":"AI exams open in Version 2: upload a file, pick Quiz or Broad, and get checked."}</div>`;
+
+function home(){
+ const first=(prof.name||"").split(" ")[0],yf=FAC.find(f=>f.name==prof.faculty);
+ return `<div class="top"><div><small>Hi ${esc(first)} 👋</small><h1>Welcome back!</h1></div><button class="av ph" onclick="setTab('me')"><img class="av" src="${esc(prof.photo||me.photoURL||"logo.png")}"></button></div>
+ <input class="srch" placeholder="Search faculty or department" oninput="find(this.value)"><div id="res"></div>
+ <button class="hero" onclick="go(${A({t:"fac",f:prof.faculty})})"><small>Your faculty</small><h2 style="margin:4px 0 0">${esc(prof.faculty)}</h2><small>${yf?yf.depts.length:0} departments ›</small></button>
+ <button class="row" onclick="go(${A({t:"sub",f:prof.faculty,d:prof.dept,s:Number(prof.sem)})})"><span>${esc(prof.dept)}<small>Semester ${esc(prof.sem)} subjects</small></span><span>›</span></button>
+ <div class="strip">🔥 Streaks and ranks start with exams in Version 2.</div>
+ <h2>Other faculties</h2><div class="scroll">${FAC.filter(f=>f.name!=prof.faculty).map(f=>`<button class="chip" onclick="go(${A({t:"fac",f:f.name})})"><b>${esc(f.name)}</b><small style="display:block;color:#a9a3b8">${f.depts.length} departments</small></button>`).join("")}</div>`;
+}
+function find(q){q=q.trim().toLowerCase();const r=$("#res");if(!q){r.innerHTML="";return}
+ const out=[];FAC.forEach(f=>{if(f.name.toLowerCase().includes(q))out.push(row(f.name,"Faculty",{t:"fac",f:f.name}));f.depts.forEach(d=>{if(d.toLowerCase().includes(q))out.push(row(d,f.name,{t:"dept",f:f.name,d}))})});
+ r.innerHTML=out.join("")||empty("Nothing found.")}
+
+function page(v){
+ if(v.t=="fac"){const f=FAC.find(x=>x.name==v.f)||{depts:[]};return head(v.f)+(f.depts.length?f.depts.map(d=>row(d,"",{t:"dept",f:v.f,d})).join(""):empty("Departments for this faculty are not added yet."))}
+ if(v.t=="dept")return head(v.d)+SEMS.map(s=>row("Semester "+s,v.d==prof.dept&&s==prof.sem?"Your semester":"",{t:"sub",f:v.f,d:v.d,s})).join("");
+ if(v.t=="sub")return head(v.d+" · Semester "+v.s)+`<div id="subs"></div><h2>Add a subject</h2><input id="ns" class="in" maxlength="70" placeholder="Subject name, e.g. Statistics"><button class="btn" onclick='addSub(${A(v)})'>Add subject</button>`;
+ if(v.t=="subj")return head(v.n)+`<div class="scroll" style="margin-bottom:14px">${["Upload","Exams","Top answers"].map(x=>`<span class="chip" style="min-width:0">${x}</span>`).join("")}</div>`+empty("Coming in Version 2: upload a file, pick Quiz or Broad, and get AI marks.");
+ if(v.t=="edit")return head("Edit profile")+formPage(true);
+ if(v.t=="rules")return head("Rules")+`<div class="empty">• Upload only material you are allowed to share.<br>• No full paid books and no leaked exams.<br>• No insults, fake accounts or cheating tricks.<br>• AI marks are estimates, not official results.<br>• Reported posts can be removed.</div>`;
+}
+async function loadSubs(v){
+ try{const s=await db.collection("subjects").where("f","==",v.f).where("d","==",v.d).where("s","==",v.s).get();const el=$("#subs");if(!el)return;
+ el.innerHTML=s.empty?empty("No subjects yet. Add the first one below."):s.docs.map(x=>row(x.data().n,"",{t:"subj",n:x.data().n})).join("")}catch(e){toast("Could not load subjects")}
+}
+async function addSub(v){const n=$("#ns").value.trim();if(!n)return toast("Type a subject name first.");
+ try{await db.collection("subjects").add({f:v.f,d:v.d,s:v.s,n,by:me.uid});$("#ns").value="";loadSubs(v)}catch(e){toast("Could not add: "+e.code)}}
+
+function me_(){
+ return `<div style="text-align:center;margin-bottom:16px"><img class="av" style="width:96px;height:96px" src="${esc(prof.photo||me.photoURL||"logo.png")}"><h1 style="margin-top:10px">${esc(prof.name)}</h1><small>${esc(prof.dept)} · ${esc(prof.faculty)}</small></div>
+ ${[["University",prof.university],["Year",prof.year],["Semester",prof.sem],["Session",prof.session],["Student ID",prof.sid],["Age",prof.age],["Major",prof.major],["Mobile",prof.mobile],["Home town",prof.home]].map(([k,v])=>`<div class="row" style="cursor:default"><small>${k}</small><span>${esc(v||"-")}</span></div>`).join("")}
+ <small style="display:block;margin:0 0 12px">Mobile and ID are private. Only you can see them.</small>
+ <button class="btn" onclick="go({t:'edit'})" style="margin-bottom:10px">Edit profile</button>
+ <button class="btn alt" onclick="go({t:'rules'})" style="margin-bottom:10px">Rules</button>
+ <button class="btn alt" onclick="auth.signOut()">Sign out</button>`;
+}
+
+function formPage(editing){
+ const p=prof||{},lockA=editing&&Date.now()-p.aAt<7*864e5,lockB=editing&&Date.now()-p.bAt<30*864e5;
+ newPhoto=null;
+ const f=(id,l,v,lock,ex="")=>`<label>${l}</label><input class="in" id="${id}" value="${esc(v)}" ${lock?"disabled":""} ${ex}>`;
+ const sel=(id,l,opts,v,lock,fn="")=>`<label>${l}</label><select class="in" id="${id}" ${lock?"disabled":""} ${fn}>${opts.map(o=>`<option ${String(o)==String(v)?"selected":""}>${esc(o)}</option>`).join("")}</select>`;
+ const dl=(FAC.find(x=>x.name==(p.faculty||FAC[0].name))||{depts:[]}).depts;
+ return (editing?"":`<h1 style="margin-bottom:4px">Set up your profile</h1><p style="margin-bottom:16px;color:#a9a3b8">This takes one minute.</p>`)+
+ `<div style="text-align:center;margin-bottom:12px"><img id="pv" class="av" style="width:88px;height:88px" src="${esc(p.photo||me.photoURL||"logo.png")}"><br>${lockA?"":`<label style="cursor:pointer;text-decoration:underline">Change photo<input type="file" accept="image/*" hidden onchange="pick(event)"></label>`}</div>`+
+ f("name","Name",p.name||me.displayName||"",lockA)+(lockA?`<div class="note">Name and photo unlock in ${left(p.aAt,7)} day(s).</div>`:"")+
+ f("age","Age",p.age||"",lockB,'type="number" min="10" max="80"')+
+ f("university","University","University of Chittagong",true)+
+ sel("faculty","Faculty",FAC.map(x=>x.name),p.faculty,lockB,'onchange="fillDl()"')+
+ `<label>Department</label><input class="in" id="dept" list="dl" value="${esc(p.dept||"")}" ${lockB?"disabled":""}><datalist id="dl">${dl.map(d=>`<option>${esc(d)}</option>`).join("")}</datalist>`+
+ f("major","Major",p.major||"",lockB)+sel("year","Year",YEARS,p.year,lockB)+sel("sem","Semester",SEMS,p.sem,lockB)+
+ f("session","Session (e.g. 2025-26)",p.session||"",lockB)+f("sid","Student ID",p.sid||"",lockB)+f("mobile","Mobile",p.mobile||"",lockB,'type="tel"')+f("home","Home town",p.home||"",lockB)+
+ (lockB?`<div class="note">Other details unlock in ${left(p.bAt,30)} day(s).</div>`:"")+
+ `<button class="btn" onclick="save()">Save profile</button>`;
+}
+function fillDl(){const f=FAC.find(x=>x.name==$("#faculty").value);$("#dl").innerHTML=(f?f.depts:[]).map(d=>`<option>${esc(d)}</option>`).join("")}
+function pick(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const c=document.createElement("canvas"),m=Math.min(i.width,i.height);c.width=c.height=240;c.getContext("2d").drawImage(i,(i.width-m)/2,(i.height-m)/2,m,m,0,0,240,240);newPhoto=c.toDataURL("image/jpeg",.8);$("#pv").src=newPhoto};i.src=r.result};r.readAsDataURL(f)}
+
+async function save(){
+ const g=id=>($("#"+id).value||"").trim(),d={name:g("name"),photo:newPhoto||(prof&&prof.photo)||me.photoURL||"",age:g("age"),faculty:g("faculty"),dept:g("dept"),major:g("major"),year:g("year"),sem:g("sem"),session:g("session"),sid:g("sid"),mobile:g("mobile"),home:g("home")};
+ if(!d.name||!d.dept)return toast("Name and department are required.");
+ const now=Date.now(),first=!prof,chA=first||G.some(k=>d[k]!==prof[k]),chB=first||B.some(k=>d[k]!==prof[k]);
+ if(!first&&chA&&now-prof.aAt<7*864e5)return toast("Name and photo are still locked.");
+ if(!first&&chB&&now-prof.bAt<30*864e5)return toast("Other details are still locked.");
+ const out={...(prof||{}),...d,university:"University of Chittagong",uid:me.uid,aAt:chA?now:prof.aAt,bAt:chB?now:prof.bAt};
+ try{await db.collection("users").doc(me.uid).set(out);prof=out;nav=[];tab="home";toast("Saved");render()}catch(e){toast("Could not save: "+e.code)}
+}
+</script></body></html>
